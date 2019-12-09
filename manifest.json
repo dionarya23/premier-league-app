@@ -1,0 +1,22 @@
+{
+    "name": "Premier League App",
+    "short_name": "PL",
+    "description": "Aplikasi Sepakbola Liga Inggris",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#3d195b",
+    "gcm_sender_id": "1091250868353",
+    "icons": [
+        {
+            "src": "icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icon512.png",
+            "sizes": "512X512",
+            "type": "image/png"
+        }
+    ]
+}

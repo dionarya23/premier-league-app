@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Premier League</title>
+    <meta name="description" content="My first PWA" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/materialize.min.css" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#00897B" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Navigasi -->
+    <nav style="background: #3d195b" class="lighten-1" role="navigation">
+      <div class="nav-wrapper container">
+        <a href="#" class="brand-logo" id="logo-container">Premier League</a>
+        <a href="./index.html" class="sidenav-trigger" data-target="nav-mobile">
+          <i class="material-icons">arrow_back</i>
+        </a>
+        <ul class="topnav right hide-on-med-and-down"></ul>
+        <ul class="sidenav" id="nav-mobile"></ul>
+      </div>
+    </nav>
+    <!-- Akhir Navigasi -->
+
+    <div class="row">
+      <div class="col s12 m12">
+        <div class="card">
+          <!-- <div id="fabFav" class="fixed-action-btn">
+            <a class="btn-floating btn-large red">
+              <i id="iconFav" class="large material-icons">favorite_border</i>
+            </a>
+          </div> -->
+  
+          <div class="card-content">
+            <div style="text-align: center">
+              <img id="crest_club" alt="data.crestUrls" align="center" width="100" height="100" vspace="25" />
+              <p id="name_club"></p>
+            </div>
+            <hr size="12px" />
+          </div>
+  
+          <div class="card-tabs">
+            <ul class="tabs tabs-fixed-width">
+              <li class="tab">
+                <a class="active" href="#detail">DETAIL</a>
+              </li>
+              <li class="tab"><a href="#list_squad">LIST SQUAD</a></li>
+              <li class="tab"><a href="#competition">COMPETITIONS</a></li>
+            </ul>
+  
+            <div class="card-content ">
+              <!-- mengisi card content dengan Data -->
+              <div id="detail">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Name Club :</td>
+                      <td id="name"></td>
+                    </tr>
+                    <tr>
+                      <td>Addres :</td>
+                      <td id="address"></td>
+                    </tr>
+                    <tr>
+                      <td>Phone :</td>
+                      <td id="phone"></td>
+                    </tr>
+                    <tr>
+                      <td>Website :</td>
+                      <td id="website"></td>
+                    </tr>
+                    <tr>
+                      <td>Founded :</td>
+                      <td id="founded"></td>
+                    </tr>
+                    <tr>
+                      <td>Venue :</td>
+                      <td id="venue"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+  
+              <div id="list_squad"></div>
+              <div id="competition">
+                <table>
+                  <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Area</th>
+                  </tr>
+                  <tbody id="competition_list">
+                    
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fixed-action-btn">
+      <a title="Tambah Favorite" class="btn-floating btn-large" href="#saved"
+         style="background: #3d195b" id="save">
+        <i class="large material-icons">save</i>
+      </a>
+    </div>
+
+    <div class="fixed-action-btn">
+      <a title="Hapus Team" class="btn-floating btn-large red" href="#remove" id="remove">
+        <i class="large material-icons">remove</i>
+      </a>
+    </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="js/materialize.min.js"></script>
+
+    <script src="js/idb.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+     if (!('serviceWorker' in navigator)) {
+          console.log("Service worker tidak didukung browser ini.");
+      } else {
+          registerServiceWorker();
+      }
+
+// Register service worker
+function registerServiceWorker() {
+    return navigator.serviceWorker.register('/service-worker.js')
+        .then(function (registration) {
+        console.log('Registrasi service worker berhasil.');
+        return registration;
+    })
+        .catch(function (err) {
+        console.error('Registrasi service worker gagal.', err);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", async function() {
+  try {
+    var urlParams = new URLSearchParams(window.location.search);
+      var idParam = urlParams.get("id");
+      var save = document.getElementById('save')
+      var remove = document.getElementById('remove')
+      var teamsData = await getAll()
+      var favoriteTeamDetail = teamsData.filter(function (team) {
+        return team.teamsId === parseInt(idParam)
+      })[0]
+
+      if (favoriteTeamDetail) {
+        save.style.display = 'none';
+      } else {
+        remove.style.display = 'none';
+      }
+    
+    var item = getDetailClub()
+    remove.onclick = function() {
+          removeById(parseInt(idParam)).then(result => {
+          alert("Berhasil Dihapus!!!")
+          remove.style.display = 'none';
+          save.style.display = "block";
+
+          console.log("jika melihat ini berarti berhasil menghapus!!")
+    }).catch(err => console.log(err))
+  }
+
+  save.onclick = function() {
+        alert("Berhasil Menambahkan Ke Team Favorite!!")
+        save.style.display = "none"
+        remove.style.display = "block"
+        item.then(function(team) {
+          var teams = {
+            teamsId: team.id,
+            activeCompetitions : team.activeCompetitions,
+            name: team.name,
+            shortName: team.shortName,
+            tla: team.tla,
+            crestUrl: team.crestUrl,
+            address: team.address,
+            phone: team.phone,
+            website: team.website,
+            email: team.email,
+            founded: team.founded,
+            clubColors: team.clubColors,
+            venue: team.venue,
+            squad : team.squad
+          }
+          saveForLater(teams).then(function(result) {
+            console.log("Sukses Result nya : ", result)
+          }).catch(err => console.log("Error Ketika memasukan data : ", err))
+
+        });
+    };
+
+
+
+
+  }catch(err) {
+    console.log("error coi : ", err)
+  }
+})
+
+        $(document).ready(function () {
+        $("ul.tabs").tabs();
+        $("ul.tabs").tabs({
+          swipeable: false
+        });
+        $("ul.tabs").tabs("select", "tab_id");
+      });
+    </script>
+  </body>
+</html>
