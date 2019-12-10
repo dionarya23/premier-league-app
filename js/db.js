@@ -6,7 +6,7 @@ function saveForLater(teams) {
   return new Promise((resolve, reject) => {
     dbPromised.then(db => {
           const transaction = db.transaction("teams", `readwrite`);
-          transaction.objectStore("teams").add(teams);
+          transaction.objectStore("teams").put(teams);
           return transaction;
       }).then(transaction => {
           if (transaction.complete) {
