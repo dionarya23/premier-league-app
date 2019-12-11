@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     var item = getDetailClub()
     remove.onclick = function() {
           removeById(parseInt(idParam)).then(result => {
-          alert("Berhasil Dihapus!!!")
+          M.toast({html: 'Berhasil Dihapus!!!'})
           remove.style.display = 'none';
           save.style.display = "block";
 
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", async function() {
   }
 
   save.onclick = function() {
-        alert("Berhasil Menambahkan Ke Team Favorite!!")
+        M.toast({html: 'Berhasil Ditambahkan Ke Team Favorite'})
         save.style.display = "none"
         remove.style.display = "block"
         item.then(function(team) {

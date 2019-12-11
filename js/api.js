@@ -1,5 +1,5 @@
-var base_url = "https://api.football-data.org/v2/";
-var token = "218249a19b2540bf94ac21f1af3e51f6";
+const base_url = "https://api.football-data.org/v2/";
+const token = "218249a19b2540bf94ac21f1af3e51f6";
 
 // Blok kode yang akan di panggil jika fetch berhasil
 function status(response) {

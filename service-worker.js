@@ -7,24 +7,29 @@ if (workbox) {
 }
 
 workbox.precaching.precacheAndRoute([
-  {url: '/', revision: '1'},
-  {url: '/nav.html',  revision: '1'},
-  {url: '/index.html',  revision: '1'},
-  {url: '/manifest.json',  revision: '1'},
-  {url: '/club.html',  revision: '1'},
-  {url: '/icon.png',  revision: '1'},
-  {url: '/icon512',  revision: '1'},
-  {url: "/pages/home.html", revision: '1'},
-  {url: "/pages/favorite.html", revision: '1'},
-  {url: "/pages/topscore.html", revision: '1'},
-  {url: "/css/materialize.min.css", revision: '1'},
-  {url: "/js/materialize.min.js", revision: '1'},
-  {url: "/js/nav.js", revision: '1'},
-  {url: "/js/api.js", revision: '1'},
-  {url: "/js/helper.js", revision: '1'},
-  {url: "/js/idb.js", revision: '1'},
-  {url: "/js/db.js", revision: '1'},
+  {url: '/', revision: '2'},
+  {url: '/nav.html',  revision: '2'},
+  {url: '/index.html',  revision: '2'},
+  {url: '/manifest.json',  revision: '2'},
+  {url: '/club.html',  revision: '2'},
+  {url: '/icon.png',  revision: '2'},
+  {url: '/icon512',  revision: '2'},
+  {url: "/pages/home.html", revision: '2'},
+  {url: "/pages/favorite.html", revision: '2'},
+  {url: "/pages/topscore.html", revision: '2'},
+  {url: "/css/materialize.min.css", revision: '2'},
+  {url: "/js/materialize.min.js", revision: '2'},
+  {url: "/js/nav.js", revision: '2'},
+  {url: "/js/api.js", revision: '2'},
+  {url: "/js/helper.js", revision: '2'},
+  {url: "/js/idb.js", revision: '2'},
+  {url: "/js/db.js", revision: '2'},
 ]);
+
+workbox.routing.registerRoute(  
+  new RegExp('/'),
+  workbox.strategies.staleWhileRevalidate()
+)
 
 workbox.routing.registerRoute(
   /\.(?:png|gif|jpg|jpeg|svg)$/,
@@ -58,76 +63,6 @@ workbox.routing.registerRoute(
   new RegExp('.*\.png'),
   workbox.strategies.cacheFirst()
 );
-
-
-//Versi Sebelumnya
-// const CACHE_NAME = "premier-league-v1.1";
-// var urlsToCache = [
-//   "/",
-//   "/nav.html",
-//   "/index.html",
-//   "/club.html",
-//   "/icon.png",
-//   "/icon512.png",
-//   "/manifest.json",
-//   "/pages/home.html",
-//   "/pages/favorite.html",
-//   "/pages/topscore.html",
-//   "/css/materialize.min.css",
-//   "/js/materialize.min.js",
-//   "/js/nav.js",
-//   "/js/api.js",
-//   "/js/helper.js",
-//   "/js/idb.js",
-//   "/js/db.js",
-// ];
-
-// self.addEventListener("install", function (event) {
-//   console.log("ServiceWorker: Menginstall..");
-
-//   event.waitUntil(
-//     caches.open(CACHE_NAME).then(function (cache) {
-//       console.log("ServiceWorker: Membuka cache..");
-//       return cache.addAll(urlsToCache);
-//     })
-//   );
-// });
-
-// self.addEventListener('activate', function (event) {
-//   console.log('Aktivasi service worker baru');
-//   event.waitUntil(
-//     caches.keys().then(function (cacheNames) {
-//       return Promise.all(
-//         cacheNames.map(function (cacheName) {
-//           if (cacheName !== CACHE_NAME && cacheName.startsWith("premier-league-app")) {
-//             return caches.delete(cacheName);
-//           }
-//         })
-//       );
-//     })
-//   );
-// });
-
-// self.addEventListener("fetch", function (event) {
-//   var base_url = "https://api.football-data.org/v2/";
-//   if (event.request.url.indexOf(base_url) > -1) {
-//     event.respondWith(
-//       caches.open(CACHE_NAME).then(function (cache) {
-//         return fetch(event.request).then(function (response) {
-//           cache.put(event.request.url, response.clone());
-//           return response;
-//         })
-//       })
-//     );
-//   } else {
-//     event.respondWith(
-//         caches.match(event.request, { ignoreSearch: true }).then(function(response) {
-//             return response || fetch (event.request);
-//         })
-//     )
-//   }
-// });
-
 
 self.addEventListener('push', function(event) {
   var body;
