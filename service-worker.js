@@ -6,6 +6,8 @@ if (workbox) {
   console.log(`Workbox gagal dimuat`);
 }
 
+workbox.setConfig({ debug: true })
+
 workbox.precaching.precacheAndRoute([
   {url: '/', revision: '2'},
   {url: '/nav.html',  revision: '2'},
@@ -24,12 +26,15 @@ workbox.precaching.precacheAndRoute([
   {url: "/js/helper.js", revision: '2'},
   {url: "/js/idb.js", revision: '2'},
   {url: "/js/db.js", revision: '2'},
-]);
+],
+{
+  ignoreUrlParametersMatching: [/.*/]
+});
 
-workbox.routing.registerRoute(  
-  new RegExp('/'),
-  workbox.strategies.staleWhileRevalidate()
-)
+// workbox.routing.registerRoute(  
+//   new RegExp('/'),
+//   workbox.strategies.StaleWhileRevalidate()
+// )
 
 workbox.routing.registerRoute(
   /\.(?:png|gif|jpg|jpeg|svg)$/,
